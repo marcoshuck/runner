@@ -10,7 +10,8 @@ type RollbackHandler interface {
 	Rollback(deployment Deployment) error
 }
 
-// Setup
+// Setup groups a set of methods to set up hooks, error handlers and execute functions.
+// Not implemented yet.
 type Setup interface {
 	SetupPreHook(f ...Func)
 	SetupExecute(f Func)
