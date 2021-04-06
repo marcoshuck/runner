@@ -1,7 +1,6 @@
 package runner
 
 import (
-	"context"
 	"github.com/google/uuid"
 )
 
@@ -51,5 +50,3 @@ func (d *deployment) Get(key string) interface{} {
 func (d *deployment) Set(key string, data interface{}) {
 	d.data[key] = data
 }
-
-type Job func(ctx context.Context, dep Deployment) Deployment

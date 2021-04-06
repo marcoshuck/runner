@@ -4,7 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 )
+
+type Job func(ctx context.Context, dep Deployment) Deployment
 
 func NewLaunchInstancesJob(p Platform) Job {
 	return func(ctx context.Context, dep Deployment) Deployment {
@@ -25,6 +28,8 @@ func NewWaitInstancesJob() Job {
 		instances := dep.Get("test").(int)
 		fmt.Printf("Waiting for [%d] instances\n", instances)
 
+		time.Sleep(5 * time.Second)
+
 		return dep
 	}
 }
@@ -39,6 +44,13 @@ func NewRemoveInstancesJob(p Platform) Job {
 			return dep
 		}
 
+		return dep
+	}
+}
+
+func NewErrorJob(err error) Job {
+	return func(ctx context.Context, dep Deployment) Deployment {
+		dep.Fail(err)
 		return dep
 	}
 }

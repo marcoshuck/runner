@@ -2,28 +2,28 @@ package main
 
 import (
 	"context"
-	"errors"
 	"github.com/google/uuid"
 	"github.com/marcoshuck/runner/prototype_2/runner"
+	"time"
 )
 
 func main() {
-	p := runner.NewPlatform()
-
 	ctx := context.Background()
+
+	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
+	defer cancel()
+
 	dep := runner.NewDeployment(uuid.New())
 
+	p := runner.NewPlatform()
 	launchInstancesJob := runner.NewLaunchInstancesJob(p)
 	waitInstancesJob := runner.NewWaitInstancesJob()
 	removeInstancesJob := runner.NewRemoveInstancesJob(p)
-
-	errorJob := runner.NewErrorJob(errors.New("some error"))
 
 	pipeline := runner.NewPipeline(
 		[]runner.Job{
 			launchInstancesJob,
 			waitInstancesJob,
-			errorJob,
 		},
 		[]runner.Job{
 			removeInstancesJob,
